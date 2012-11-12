@@ -1,0 +1,19 @@
+{
+	"name": "_Lib",
+	"description": "_php libraries",
+	"homepage": "http://underscorephp.com",
+	"license": "<http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3",
+	"authors": [
+        {
+            "name": "Ken Goldfarb",
+            "email": "hello@kengoldfarb.com",
+            "homepage": "http://www.kengoldfarb.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+	"autoload": {
+        "classmap": ["src/_Libs"]
+    }
+}
