@@ -13,9 +13,11 @@
  * 
  **************************************************************************************************/
 namespace _;
+if(!defined('_BASE_PATH')){
+	define('_BASE_PATH', realpath(dirname(__FILE__) . '/') . '/');
+}
 
-$_CONFIG = is_array($_CONFIG) ? $_CONFIG : array();
-
+require_once(_BASE_PATH . 'includes/_CryptIncludes.php');
 /**************************************************************************************************
  * BEGIN _Crypt CONSTANTS
  * 
@@ -25,9 +27,7 @@ define('_CRYPT_CIPHER', MCRYPT_RIJNDAEL_256);
 define('_CRYPT_MODE', MCRYPT_MODE_CBC);
 define('_CRYPT_IV_SIZE', 256);
 define('_CRYPT_AES_KEY', '_PHPTestKeyHere1234');
-define('_CRYPT_RSA_1024', 1024);
-define('_CRYPT_RSA_2048', 2048);
-define('_CRYPT_RSA_4096', 4096);
+
 
 // WARNING: These should be used for testing only.  You should CHANGE THESE in your own application
 define('_CRYPT_RSA_PUBLIC_KEY', '-----BEGIN PUBLIC KEY-----
