@@ -1,0 +1,48 @@
+{
+    "hash": "d6cb27bbeceddffc1931495bbbdb21c5",
+    "packages": [
+        {
+            "name": "kengoldfarb/_libs",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:kengoldfarb/_libs.git",
+                "reference": "f8b58e8f873bf600924fe5a71c8d1c02d62243dc"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "time": "1352754746",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "classmap": [
+                    "src/_Libs"
+                ]
+            },
+            "license": [
+                "<http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3"
+            ],
+            "authors": [
+                {
+                    "name": "Ken Goldfarb",
+                    "email": "hello@kengoldfarb.com",
+                    "homepage": "http://www.kengoldfarb.com"
+                }
+            ],
+            "description": "_php libraries",
+            "homepage": "http://underscorephp.com"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "kengoldfarb/_libs": 20
+    }
+}
