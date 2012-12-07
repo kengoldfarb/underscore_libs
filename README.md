@@ -15,7 +15,7 @@ In your composer.json file add:
 ```json
 {
     "require": {
-        "kengoldfarb/_libs": "1.*"
+        "kengoldfarb/UnderscoreLibs": "1.*"
     }
 }
 ```
