@@ -1,5 +1,5 @@
 {
 	"require": {
-		"kengoldfarb/underscore_libs": "dev-master"
+		"kengoldfarb/underscore_libs": "1.*"
 	}
 }
