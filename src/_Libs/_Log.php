@@ -42,7 +42,7 @@ require_once(_BASE_PATH . '_includes/_LogIncludes.php');
  */
 // Sets the log level.  Can be set to: _DEBUG, _INFO, _WARN, _CRIT, _FATAL
 if (!defined('_LOG_LEVEL')) {
-    define('_LOG_LEVEL', _INFO);
+    define('_LOG_LEVEL', _DEBUG);
 }
 
 // Allows the logging of objects.  When set to true, objects will be logged in the format of print_r().  When set to false, only simple object types (strings, integers, etc.) will be logged.
@@ -58,6 +58,11 @@ if (!defined('_LOG_ECHO')) {
 // If logging using error_log() fails should an exception be thrown?
 if (!defined('_LOG_USE_EXCEPTIONS')) {
     define('_LOG_USE_EXCEPTIONS', true);
+}
+
+// If logging using error_log() fails should an exception be thrown?
+if (!defined('_LOG_DO_DEBUG_BACKTRACE')) {
+    define('_LOG_DO_DEBUG_BACKTRACE', false);
 }
 
 /**
@@ -191,17 +196,21 @@ class _Log {
             return FALSE;
         }
 
-        self::$lastDebugBacktrace = debug_backtrace();
+        if(_LOG_DO_DEBUG_BACKTRACE){
+            self::$lastDebugBacktrace = debug_backtrace();
+        }
+        
         // Add level to message
         $level = self::$logLevelToString[$level];
-        $msg = "[*** _Log ***] [$level] [";
+        $msg = "***** [ _Log ][ $level ] ";
 
         // TODO fix formatting of message here
         // Add trace/location to message
-        if (self::$lastDebugBacktrace !== FALSE && isset(self::$lastDebugBacktrace[1]) && isset(self::$lastDebugBacktrace[1]['file']) && isset(self::$lastDebugBacktrace[1]['line'])) {
+        if (_LOG_DO_DEBUG_BACKTRACE && self::$lastDebugBacktrace !== FALSE && isset(self::$lastDebugBacktrace[1]) && isset(self::$lastDebugBacktrace[1]['file']) && isset(self::$lastDebugBacktrace[1]['line'])) {
+            $msg.= "[";
             $debugBacktraceLength = count(self::$lastDebugBacktrace);
             $first = true;
-//			print_r(self::$lastDebugBacktrace);
+            
             for ($i = $debugBacktraceLength; $i >= 0; $i--) {
                 if (isset(self::$lastDebugBacktrace[$i]) && isset(self::$lastDebugBacktrace[$i]['file'])) {
                     $file = self::_getFile(self::$lastDebugBacktrace[$i]['file']);
@@ -215,9 +224,10 @@ class _Log {
                     $first = false;
                 }
             }
+            $msg .= ']';
         }
-        $msg .= ']';
 
+        $msg .= ' [ ';
         $doLogAtEnd = TRUE;
         $class = @get_class($obj);
         if (!isset($obj)) {
@@ -251,7 +261,7 @@ class _Log {
                     if (!self::$logObjects) {
                         $msg .= "OBJECT | Logging of objects is turned off.  Set _LOG_OBJECTS to TRUE to enable";
                     } else {
-                        $rc = self::_doLog("$msg (BEGIN)($type)");
+                        $rc = self::_doLog("$msg [ (BEGIN)($type) ]");
                         if (self::$logEcho !== true) {
                             $obStarted = ob_start();
                             if ($obStarted) {
@@ -267,14 +277,16 @@ class _Log {
                         } else {
                             print_r($obj);
                         }
-                        $rc2 = self::_doLog("$msg (END)($type)");
+                        $rc2 = self::_doLog("$msg (END)($type) ] *****'");
                         $rc = $rc && $rc2;
                         return $rc;
                     }
                     break;
             }
         }
-
+        
+        $msg .= ' ] *****';
+        
         if ($doLogAtEnd) {
             return self::_doLog($msg);
         }
