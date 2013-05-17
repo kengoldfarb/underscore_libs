@@ -30,47 +30,51 @@ require_once(_BASE_PATH . '_includes/_DbIncludes.php');
  * To be used when this library is stand-alone
  * 
  */
-// The DB host
-if (!defined('_DB_HOST')) {
-    define('_DB_HOST', 'localhost');
-}
-// The DB username
-if (!defined('_DB_USERNAME')) {
-    define('_DB_USERNAME', 'root');
-}
-// The password for the user
-if (!defined('_DB_PASSWORD')) {
-    define('_DB_PASSWORD', 'root');
-}
-// The actual DB name
-if (!defined('_DB_NAME')) {
-    define('_DB_NAME', 'underscorephp');
-}
-// The connection port
-if (!defined('_DB_PORT')) {
-    define('_DB_PORT', '3306');
-}
-// The socket connection to use (can be NULL)
-if (!defined('_DB_SOCKET')) {
-    define('_DB_SOCKET', NULL);
-}
-// Whether to throw exceptions when connection or query failures occur
-if (!defined('_DB_USE_EXCEPTIONS')) {
-    define('_DB_USE_EXCEPTIONS', TRUE);
-}
-// The DB charset to use
-if (!defined('_DB_CHARSET')) {
-    define('_DB_CHARSET', 'utf8');
-}
-// Whether to log all SQL statements **IMPORTANT: THIS IS A DEBUG FUNCTION.
-// DO NOT SET THIS TO 'TRUE' IN A PRODUCTION ENVIRONMENT!!!
-if (!defined('_DB_LOG_SQL')) {
-    define('_DB_LOG_SQL', FALSE);
+ 
+class _DbConfig{
+    // The DB host
+    const HOST = 'localhost';
+    // The DB username
+    const USERNAME = 'kengoldfarb';
+    // The password for the user
+    const PASSWORD = '';
+    // The actual DB name
+    const DB_NAME = 'underscorelibs';
+    // The connection port
+    const PORT = '3306';
+    // The socket connection to use (can be NULL)
+    const SOCKET = NULL;
+    // Whether to throw exceptions when connection or query failures occur
+    const USE_EXCEPTIONS = TRUE;
+    // The DB charset to use
+    const CHARSET = 'utf8';
+    // Whether to log all SQL statements **IMPORTANT: THIS IS A DEBUG FUNCTION.
+    // DO NOT SET THIS TO 'TRUE' IN A PRODUCTION ENVIRONMENT!!!
+    const LOG_SQL = FALSE;
 }
 
 /**
  * END _Db USER OPTIONS
  * ************************************************************************************************ */
+
+/* * ************************************************************************************************
+ * BEGIN INTERNAL _Db CONSTANTS
+ * 
+ * There's probably no reason you'd ever need to edit this
+ * 
+ */
+ 
+class _DbErrors{
+    const CONNECTION_ERROR = -1300;
+    const QUERY_ERROR = -1301;
+    const ERROR = -1302;
+}
+
+/**
+ * END INTERNAL _Db CONSTANTS
+ * ************************************************************************************************ */
+ 
+ 
 /* * ************************************************************************************************
  * The Database class
  */
@@ -110,7 +114,7 @@ class _Db {
      * @param type $port
      * @param type $socket
      */
-    public function __construct($host = _DB_HOST, $username = _DB_USERNAME, $password = _DB_PASSWORD, $dbName = _DB_NAME, $port = _DB_PORT, $socket = _DB_SOCKET) {
+    public function __construct($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET) {
         $this->host = $host;
         $this->username = $username;
         $this->password = $password;
@@ -126,7 +130,7 @@ class _Db {
      * @return boolean|string
      * @throws _Exception with code _DB_QUERY_ERROR only if _DB_USE_EXCEPTIONS == TRUE or $useExceptions (override) == TRUE
      */
-    public function query($sql, $useExceptions = _DB_USE_EXCEPTIONS) {
+    public function query($sql, $useExceptions = _DbConfig::USE_EXCEPTIONS) {
         if (!$this->isConnected) {
             $rc = $this->createConnection();
             if ($rc === FALSE) {
@@ -153,7 +157,7 @@ class _Db {
             _Log::crit('Error occurred while executing query');
 
             if ($useExceptions) {
-                throw new _Exception('Error executing query', _DB_QUERY_ERROR);
+                throw new _Exception('Error executing query', _DbErrors::QUERY_ERROR);
             } else {
                 return FALSE;
             }
@@ -171,7 +175,7 @@ class _Db {
      * @param bool $useExceptions | Override to throw an _Exception on error
      * @return array/bool | Returns the row as an associative array on success / FALSE on failure
      */
-    public function getRow($result = NULL, $useExceptions = _DB_USE_EXCEPTIONS) {
+    public function getRow($result = NULL, $useExceptions = _DbConfig::USE_EXCEPTIONS) {
         if ($result === NULL) {
             $result = $this->lastResult;
         }
