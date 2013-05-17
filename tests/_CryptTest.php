@@ -10,7 +10,7 @@
  * 
  * ************************************************************************************************ */
 
-require_once 'PHPUnit/Autoload.php';
+//require_once 'PHPUnit/Autoload.php';
 
 if (!defined('_LIB')) {
     define('_LIB', realpath(dirname(__FILE__) . '/../') . '/src/_Libs/');
@@ -65,25 +65,25 @@ class _CryptTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRSAGenerateKeys() {
-        $keys = _Crypt::_generateRSAKeys(_CRYPT_RSA_2048);
+        $keys = _Crypt::_generateRSAKeys(2048);
         echo "\n\n" . $keys['public'] . "\n\n";
         echo "\n\n" . $keys['private'] . "\n\n";
     }
 
     public function testRSAEncryptDecrypt1024() {
-        $keys = _Crypt::_generateRSAKeys(_CRYPT_RSA_1024);
+        $keys = _Crypt::_generateRSAKeys(1024);
 
         for ($i = 0; $i < 5; $i++) {
             $txt = _Rand::_randString(_Rand::_getRand(1, 3000));
             $key = _Rand::_randString(_Rand::_getRand(1, 3000));
             $encrypted = _Crypt::_encryptRSA($txt, $keys['public']);
-            $decrypted = _Crypt::_decryptRSA($encrypted, $keys['private'], _CRYPT_RSA_1024);
+            $decrypted = _Crypt::_decryptRSA($encrypted, $keys['private'], 1024);
             $this->assertEquals($txt, $decrypted);
         }
     }
 
     public function testRSAEncryptDecrypt2048() {
-        $keys = _Crypt::_generateRSAKeys(_CRYPT_RSA_2048);
+        $keys = _Crypt::_generateRSAKeys(2048);
 
         for ($i = 0; $i < 5; $i++) {
             $txt = _Rand::_randString(_Rand::_getRand(1, 3000));
@@ -95,13 +95,13 @@ class _CryptTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testRSAEncryptDecrypt4096() {
-        $keys = _Crypt::_generateRSAKeys(_CRYPT_RSA_4096);
+        $keys = _Crypt::_generateRSAKeys(4096);
 
         for ($i = 0; $i < 5; $i++) {
             $txt = _Rand::_randString(_Rand::_getRand(1, 3000));
             $key = _Rand::_randString(_Rand::_getRand(1, 3000));
             $encrypted = _Crypt::_encryptRSA($txt, $keys['public']);
-            $decrypted = _Crypt::_decryptRSA($encrypted, $keys['private'], _CRYPT_RSA_4096);
+            $decrypted = _Crypt::_decryptRSA($encrypted, $keys['private'], 4096);
             $this->assertEquals($txt, $decrypted);
         }
     }

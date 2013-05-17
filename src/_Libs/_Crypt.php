@@ -20,7 +20,6 @@ if (!defined('_BASE_PATH')) {
     define('_BASE_PATH', realpath(dirname(__FILE__) . '/') . '/');
 }
 
-require_once(_BASE_PATH . '_includes/_CryptIncludes.php');
 require_once(_BASE_PATH . '_Rand.php');
 
 /* * ************************************************************************************************
@@ -28,14 +27,13 @@ require_once(_BASE_PATH . '_Rand.php');
  * 
  * You can edit the default constants here
  */
-define('_CRYPT_CIPHER', MCRYPT_RIJNDAEL_256);
-define('_CRYPT_MODE', MCRYPT_MODE_CBC);
-define('_CRYPT_IV_SIZE', 256);
-define('_CRYPT_AES_KEY', '_PHPTestKeyHere1234');
-
-
-// WARNING: These should be used for testing only.  You should CHANGE THESE in your own application
-define('_CRYPT_RSA_PUBLIC_KEY', '-----BEGIN PUBLIC KEY-----
+ 
+class _CryptConfig {
+    const CIPHER = MCRYPT_RIJNDAEL_256;
+    const MODE = MCRYPT_MODE_CBC;
+    const IV_SIZE = 256;
+    const AES_KEY = '_PHPTestKeyHere1234';
+    const RSA_PUBLIC_KEY = '-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4Vq3tpiH63PYBVW0bBNP
 +RISZwStJchfZHIPlbsuQSER/3ePFgbsksAS02qMjZq1QwGrtfD8Tvlseb1G054a
 sDCa4m4/TNVHgeE0GXMrHanlPbMF30x0ENbd3rmorbxbcWdImnfhcu0C4SnVqyrZ
@@ -43,9 +41,8 @@ Xk2fyJFqLx+TpldfK1wkjCicRzTesutB0lgCe501CRuo9q8hdAuVnq0VayfmuIDz
 guMYc9svKA2OyFYxXNCokAz44AW2OJlpw515WJNBTybFjTN9hc5f3CPIFkw4RqkX
 f01WSHP5hj1Zaj5bNiQ6PauOjP0fZKqSvjIQtmeicjI/54uuVtBgatdQm5mZqbuy
 SwIDAQAB
------END PUBLIC KEY-----');
-
-define('_CRYPT_RSA_PRIVATE_KEY', '-----BEGIN RSA PRIVATE KEY-----
+-----END PUBLIC KEY-----';
+    const RSA_PRIVATE_KEY = '-----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEA4Vq3tpiH63PYBVW0bBNP+RISZwStJchfZHIPlbsuQSER/3eP
 FgbsksAS02qMjZq1QwGrtfD8Tvlseb1G054asDCa4m4/TNVHgeE0GXMrHanlPbMF
 30x0ENbd3rmorbxbcWdImnfhcu0C4SnVqyrZXk2fyJFqLx+TpldfK1wkjCicRzTe
@@ -71,11 +68,12 @@ dv7oAlHiATjH2fHW6ylGDMhrLamN/ejOiQ4ygLWup6gs3qH206cSnnVs4FU+RXSV
 bm5DqM8CgYEA4wGCStCY8BKey0YCnU9+RBJUc46Jf0WAedZapBX/aVQLg9e+DdQx
 6cVVbKNmsBa0RupPk6kcJKb+3zofOEFolgbCv8YnXhX2YIsNhzyv8peUfn+bUrdf
 jZ10TNRVnrubvoT9KU9e7TCVCDabBxPzGx5AoOwo2W5QS3QseZ/Spfw=
------END RSA PRIVATE KEY-----');
-
+-----END RSA PRIVATE KEY-----';
+}
 /**
  * END _Crypt USER OPTIONS
  * ************************************************************************************************ */
+ 
 class _Crypt {
 
     /**
@@ -91,7 +89,7 @@ class _Crypt {
      * @param cont $mode (optional) One of the MCRYPT_MODE modes
      * @return string The encrypted string
      */
-    public static function _encryptAESPKCS7($str, $key = _CRYPT_AES_KEY, $cipher = _CRYPT_CIPHER, $mode = _CRYPT_MODE) {
+    public static function _encryptAESPKCS7($str, $key = _CryptConfig::AES_KEY, $cipher = _CryptConfig::CIPHER, $mode = _CryptConfig::MODE) {
         $key = self::_chopKeyForAES($key);
         $block = mcrypt_get_block_size($cipher, $mode);
         $pad = $block - (strlen($str) % $block);
@@ -114,7 +112,7 @@ class _Crypt {
      * @param cont $mode (optional) One of the MCRYPT_MODE modes
      * @return string The encrypted string
      */
-    public static function _decryptAESPKCS7($str, $key = _CRYPT_AES_KEY, $cipher = _CRYPT_CIPHER, $mode = _CRYPT_MODE) {
+    public static function _decryptAESPKCS7($str, $key = _CryptConfig::AES_KEY, $cipher = _CryptConfig::CIPHER, $mode = _CryptConfig::MODE) {
         $key = self::_chopKeyForAES($key);
         $ivLength = self::_getBase64IVLength($cipher, $mode);
         $iv = substr($str, 0, $ivLength - 1);
@@ -136,7 +134,7 @@ class _Crypt {
      * @param string $pubKey (optional) The RSA public key
      * @return boolean|string FALSE on failure / The encrypted string on Success
      */
-    public static function _encryptRSA($str, $pubKey = _CRYPT_RSA_PUBLIC_KEY) {
+    public static function _encryptRSA($str, $pubKey = _CryptConfig::RSA_PUBLIC_KEY) {
         $aesKey = self::_generateAESKey();
 
         // encrypt string with AES
@@ -155,10 +153,10 @@ class _Crypt {
      * 
      * @param string $str The encrypted string
      * @param string $privKey (optional) The RSA private key
-     * @param cont $keyBits (optional) Whatever was used to encrypt.  Can be: _CRYPT_RSA_1024, _CRYPT_RSA_2048, _CRYPT_RSA_4096
+     * @param cont $keyBits (optional) Whatever was used to encrypt.  Can be: 1024, 2048, or 4096
      * @return boolean|string FALSE on failure / The decrypted string on success
      */
-    public static function _decryptRSA($str, $privKey = _CRYPT_RSA_PRIVATE_KEY, $keyBits = _CRYPT_RSA_2048) {
+    public static function _decryptRSA($str, $privKey = _CryptConfig::RSA_PRIVATE_KEY, $keyBits = 2048) {
         $keyLength = self::_getRSAAESKeyLength($keyBits);
         $encryptedKey = base64_decode(substr($str, 0, $keyLength));
         $encryptedStr = substr($str, $keyLength);
@@ -207,10 +205,10 @@ class _Crypt {
     /**
      * Generates a RSA public/private keypair
      *
-     * @param int $keyBits (optional) The number of key bits to use. Can be: _CRYPT_RSA_1024, _CRYPT_RSA_2048, _CRYPT_RSA_4096
+     * @param int $keyBits (optional) The number of key bits to use. Can be: 1024, 2048, 4096
      * @return array Returns an associative array with 'public' and 'private' keys
      */
-    public static function _generateRSAKeys($keyBits = _CRYPT_RSA_2048) {
+    public static function _generateRSAKeys($keyBits = 2048) {
         $conf = array(
             'digest_alg' => 'sha256',
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
@@ -235,13 +233,13 @@ class _Crypt {
      */
     private static function _getRSAAESKeyLength($keylength) {
         switch ($keylength) {
-            case _CRYPT_RSA_1024:
+            case 1024:
                 return 172;
 
-            case _CRYPT_RSA_2048:
+            case 2048:
                 return 344;
 
-            case _CRYPT_RSA_4096:
+            case 4096:
                 return 684;
 
             default:

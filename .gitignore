@@ -2,3 +2,4 @@
 /examples/vendor/
 composer.lock
 .DS_Store
+.c9revisions/
