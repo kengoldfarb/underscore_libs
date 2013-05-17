@@ -229,7 +229,7 @@ class _Db {
      * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
      * false on connection error
      */
-    private function createConnection($useExceptions = _DB_USE_EXCEPTIONS) {
+    private function createConnection($useExceptions = _DbConfig::USE_EXCEPTIONS) {
         $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->dbName, $this->port, $this->socket);
         if (mysqli_connect_errno()) {
             $msg = 'Unable to connect to MySQL | ' . mysqli_connect_error();
@@ -243,7 +243,7 @@ class _Db {
         }
         if (isset($this->mysqli) && $this->mysqli !== NULL) {
             // set charset
-            $rc = $this->mysqli->set_charset(_DB_CHARSET);
+            $rc = $this->mysqli->set_charset(_DbConfig::CHARSET);
             if ($rc !== TRUE) {
                 _Log::warn('Error setting character set');
             }
@@ -294,7 +294,7 @@ class _Db {
      * @param bool $useExceptions | Override to throw an _Exception on error
      * @return array/bool | Returns the row as an associative array on success / FALSE on failure
      */
-    public static function _getRow($result = NULL, $useExceptions = _DB_USE_EXCEPTIONS) {
+    public static function _getRow($result = NULL, $useExceptions = _DbConfig::USE_EXCEPTIONS) {
         if (!self::_isConnected()) {
             self::_createConnection();
         }
@@ -309,8 +309,8 @@ class _Db {
      * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
      * false on connection error
      */
-    public static function _createConnection($host = _DB_HOST, $username = _DB_USERNAME, $password = _DB_PASSWORD, $dbName = _DB_NAME, $port = _DB_PORT, $socket = _DB_SOCKET) {
-        self::$_db = new _Db($host = _DB_HOST, $username = _DB_USERNAME, $password = _DB_PASSWORD, $dbName = _DB_NAME, $port = _DB_PORT, $socket = _DB_SOCKET);
+    public static function _createConnection($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET) {
+        self::$_db = new _Db($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET);
     }
 
     /**
