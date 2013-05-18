@@ -31,7 +31,7 @@ class _ServiceResponseTest extends PHPUnit_Framework_TestCase {
             'single' => 'hello!',
             'arr_in_arr' => array(0, 1, 2, 3, 4, 5)
         );
-        $ret = _ServiceResponse::_success($data, FALSE, _ServiceResponse_XML);
+        $ret = _ServiceResponse::_success($data, FALSE, 'xml');
         $this->assertNotEquals(FALSE, $ret);
     }
 
