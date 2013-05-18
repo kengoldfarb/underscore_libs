@@ -21,7 +21,6 @@ if (!defined('_BASE_PATH')) {
 
 require_once(_BASE_PATH . '_Log.php');
 require_once(_BASE_PATH . '_Exception.php');
-require_once(_BASE_PATH . '_includes/_DbIncludes.php');
 
 
 /* * ************************************************************************************************
@@ -33,11 +32,11 @@ require_once(_BASE_PATH . '_includes/_DbIncludes.php');
  
 class _DbConfig{
     // The DB host
-    const HOST = 'localhost';
+    const HOST = '127.0.0.1';
     // The DB username
-    const USERNAME = 'kengoldfarb';
+    const USERNAME = 'root';
     // The password for the user
-    const PASSWORD = '';
+    const PASSWORD = 'root';
     // The actual DB name
     const DB_NAME = 'underscorelibs';
     // The connection port
@@ -137,7 +136,7 @@ class _Db {
                 return FALSE;
             }
         }
-        if (_DB_LOG_SQL) {
+        if (_DbConfig::LOG_SQL) {
             _Log::debug($sql);
         }
 
@@ -145,7 +144,7 @@ class _Db {
             $this->lastResult = $this->mysqli->query($sql);
         } catch (Exception $e) {
             if ($useExceptions) {
-                throw new _Exception('Error executing query | ' . $e->getMessage(), _DB_QUERY_ERROR, $e);
+                throw new _Exception('Error executing query | ' . $e->getMessage(), _DbErrors::QUERY_ERROR, $e);
             } else {
                 return FALSE;
             }

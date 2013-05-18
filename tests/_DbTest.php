@@ -20,6 +20,8 @@ require_once _LIB . '_Db.php';
 require_once _LIB . '_Log.php';
 
 use _\_Db;
+use _\_DbConfig;
+use _\_DbErrors;
 use _\_Log;
 
 class _DbTest extends PHPUnit_Framework_TestCase {
@@ -28,7 +30,7 @@ class _DbTest extends PHPUnit_Framework_TestCase {
         $t = array('1', '2', '3');
         _Log::debug($t);
 
-        $db = new _Db(_DB_USERNAME, _DB_PASSWORD);
+        $db = new _Db(_DbConfig::USERNAME, _DbConfig::PASSWORD);
         $this->assertEquals(gettype($db), 'object');
 
         $db = new _Db();
@@ -67,8 +69,8 @@ class _DbTest extends PHPUnit_Framework_TestCase {
         try {
             // second time should fail with exception
             $result = $db->query($sql);
-        } catch (_Exception $e) {
-            $this->assertSame($e->getCode(), _DB_QUERY_ERROR);
+        } catch (Exception $e) {
+            $this->assertSame($e->getCode(), _DbErrors::QUERY_ERROR);
         }
 
         // cleanup

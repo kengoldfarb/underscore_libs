@@ -28,8 +28,6 @@ if (!defined('_BASE_PATH')) {
     define('_BASE_PATH', realpath(dirname(__FILE__) . '/') . '/');
 }
 
-require_once(_BASE_PATH . '_includes/_LogIncludes.php');
-
 
 /* * ************************************************************************************************
  * BEGIN USER OPTIONS
@@ -46,11 +44,11 @@ class _LogConfig {
     // Setting it to WARN would log only WARN or FATAL level
     const LOG_LEVEL = _LogContants::DEBUG;
     // Allows the logging of objects.  When set to true, objects will be logged in the format of print_r().  When set to false, only simple object types (strings, integers, etc.) will be logged.    
-    const LOG_OBJECT = TRUE;
+    const LOG_OBJECTS = TRUE;
     // Echos any errors to stdout instead of logging via error_log() function
     const LOG_ECHO = FALSE;
     // If logging using error_log() fails should an exception be thrown?  (Probably not)
-    const USE_EXCEPTION = FALSE;
+    const USE_EXCEPTIONS = FALSE;
     // EXPERIMENTAL: Off by default.  Definitely don't use in a production environment
     const DO_DEBUG_BACKTRACE = FALSE;
 }
@@ -81,22 +79,22 @@ class _Log {
     /**
      * @var _LOG_LEVEL | May be:  _DEBUG, _INFO, _WARN, _CRIT, _FATAL
      */
-    public static $logLevel = _LOG_LEVEL;
+    public static $logLevel = _LogConfig::LOG_LEVEL;
 
     /**
      * @var bool 
      */
-    public static $logObjects = _LOG_OBJECTS;
+    public static $logObjects = _LogConfig::LOG_OBJECTS;
 
     /**
      * @var bool 
      */
-    public static $logEcho = _LOG_ECHO;
+    public static $logEcho = _LogConfig::LOG_ECHO;
 
     /**
      * @var bool 
      */
-    public static $useExceptions = _LOG_USE_EXCEPTIONS;
+    public static $useExceptions = _LogConfig::USE_EXCEPTIONS;
 
     /**
      * Mapping of log level constants to strings
@@ -104,12 +102,12 @@ class _Log {
      * @var array 
      */
     protected static $logLevelToString = array(
-        _FATAL => '_FATAL',
-        _CRIT => '_CRIT',
-        _WARN => '_WARN',
-        _INFO => '_INFO',
-        _DEBUG => '_DEBUG',
-        _DEBUG_LIB => '_DEBUG_LIB'
+        _LogContants::FATAL => '_FATAL',
+        _LogContants::CRIT => '_CRIT',
+        _LogContants::WARN => '_WARN',
+        _LogContants::INFO => '_INFO',
+        _LogContants::DEBUG => '_DEBUG',
+        _LogContants::DEBUG_LIB => '_DEBUG_LIB'
     );
     protected static $numFileLogs = 0;
 
@@ -127,7 +125,7 @@ class _Log {
      * @return bool | TRUE on success / FALSE on failure
      */
     public static function debug($anyObject) {
-        return self::writeToLog(_DEBUG, $anyObject);
+        return self::writeToLog(_LogContants::DEBUG, $anyObject);
     }
 
     /**
@@ -137,7 +135,7 @@ class _Log {
      * @return bool | TRUE on success / FALSE on failure
      */
     public static function info($anyObject) {
-        return self::writeToLog(_INFO, $anyObject);
+        return self::writeToLog(_LogContants::INFO, $anyObject);
     }
 
     /**
@@ -147,7 +145,7 @@ class _Log {
      * @return bool | TRUE on success / FALSE on failure
      */
     public static function warn($anyObject) {
-        return self::writeToLog(_WARN, $anyObject);
+        return self::writeToLog(_LogContants::WARN, $anyObject);
     }
 
     /**
@@ -157,7 +155,7 @@ class _Log {
      * @return bool | TRUE on success / FALSE on failure
      */
     public static function crit($anyObject) {
-        return self::writeToLog(_CRIT, $anyObject);
+        return self::writeToLog(_LogContants::CRIT, $anyObject);
     }
 
     /**
@@ -167,7 +165,7 @@ class _Log {
      * @return bool | TRUE on success / FALSE on failure
      */
     public static function fatal($anyObject) {
-        return self::writeToLog(_FATAL, $anyObject);
+        return self::writeToLog(_LogContants::FATAL, $anyObject);
     }
 
     /**
@@ -204,7 +202,7 @@ class _Log {
             return FALSE;
         }
 
-        if(_LOG_DO_DEBUG_BACKTRACE){
+        if(_LogConfig::DO_DEBUG_BACKTRACE){
             self::$lastDebugBacktrace = debug_backtrace();
         }
         
@@ -214,7 +212,7 @@ class _Log {
 
         // TODO fix formatting of message here
         // Add trace/location to message
-        if (_LOG_DO_DEBUG_BACKTRACE && self::$lastDebugBacktrace !== FALSE && isset(self::$lastDebugBacktrace[1]) && isset(self::$lastDebugBacktrace[1]['file']) && isset(self::$lastDebugBacktrace[1]['line'])) {
+        if (_LogConfig::DO_DEBUG_BACKTRACE && self::$lastDebugBacktrace !== FALSE && isset(self::$lastDebugBacktrace[1]) && isset(self::$lastDebugBacktrace[1]['file']) && isset(self::$lastDebugBacktrace[1]['line'])) {
             $msg.= "[";
             $debugBacktraceLength = count(self::$lastDebugBacktrace);
             $first = true;
