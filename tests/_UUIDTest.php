@@ -16,14 +16,12 @@ if (!defined('_LIB')) {
     define('_LIB', realpath(dirname(__FILE__) . '/../') . '/src/_Libs/');
 }
 
-require_once _LIB . '_includes/_LogIncludes.php';
-define('_LOG_LEVEL', _DEBUG_LIB);
 require_once _LIB . '_UUID.php';
 require_once _LIB . '_Log.php';
 
 use _\_UUID;
 
-class _SessionTest extends PHPUnit_Framework_TestCase {
+class _UUIDTest extends PHPUnit_Framework_TestCase {
 
     public function testGetUUID() {
         $uuids = array();
