@@ -43,7 +43,7 @@ class _File {
 
     /**
      * 
-     * @param type $filename (optional) The file to open or _FILE_TMP to generate a temporary file
+     * @param type $filename (optional) The file to open or _FileConstants::TMP to generate a temporary file
      * @param type $permissions (optional) The permissions to open the file
      *  _FileConstants::READ_ONLY
      *  _FileConstants::READ_WRITE
@@ -138,7 +138,7 @@ class _File {
             return false;
         }
 
-        if ($filename == _FILE_TMP) {
+        if ($filename == _FileConstants::TMP) {
             $this->filename = tempnam($this->getTemporaryFileDirectory(), '_');
             $this->fh = tmpfile();
         } else {
