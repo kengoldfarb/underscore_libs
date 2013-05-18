@@ -40,34 +40,42 @@ require_once(_BASE_PATH . '_includes/_LogIncludes.php');
  * in an environment file (ex. /env/local.php) then the below options will be ignored
  * 
  */
-// Sets the log level.  Can be set to: _DEBUG, _INFO, _WARN, _CRIT, _FATAL
-if (!defined('_LOG_LEVEL')) {
-    define('_LOG_LEVEL', _DEBUG);
+class _LogConfig {
+    // Sets the minimum log level.  Can be DEBUG, INFO, WARN, CRIT, FATAL.
+    // Setting this to DEBUG for example would also log all other types
+    // Setting it to WARN would log only WARN or FATAL level
+    const LOG_LEVEL = _LogContants::DEBUG;
+    // Allows the logging of objects.  When set to true, objects will be logged in the format of print_r().  When set to false, only simple object types (strings, integers, etc.) will be logged.    
+    const LOG_OBJECT = TRUE;
+    // Echos any errors to stdout instead of logging via error_log() function
+    const LOG_ECHO = FALSE;
+    // If logging using error_log() fails should an exception be thrown?  (Probably not)
+    const USE_EXCEPTION = FALSE;
+    // EXPERIMENTAL: Off by default.  Definitely don't use in a production environment
+    const DO_DEBUG_BACKTRACE = FALSE;
 }
-
-// Allows the logging of objects.  When set to true, objects will be logged in the format of print_r().  When set to false, only simple object types (strings, integers, etc.) will be logged.
-if (!defined('_LOG_OBJECTS')) {
-    define('_LOG_OBJECTS', true);
-}
-
-// Echos any errors to stdout instead of logging via error_log() function
-if (!defined('_LOG_ECHO')) {
-    define('_LOG_ECHO', false);
-}
-
-// If logging using error_log() fails should an exception be thrown?
-if (!defined('_LOG_USE_EXCEPTIONS')) {
-    define('_LOG_USE_EXCEPTIONS', true);
-}
-
-// If logging using error_log() fails should an exception be thrown?
-if (!defined('_LOG_DO_DEBUG_BACKTRACE')) {
-    define('_LOG_DO_DEBUG_BACKTRACE', false);
-}
-
 /**
  * END USER OPTIONS
  * ************************************************************************************************ */
+
+/* * ************************************************************************************************
+ * BEGIN Log Options
+ * 
+ * There's probably no reason you'd ever need to edit this
+ */
+
+class _LogContants {
+    const FATAL = -13000;
+    const CRIT = -13001;
+    const WARN = -13002;
+    const INFO = -13003;
+    const DEBUG = -13004;
+    const DEBUG_LIB = -13005;
+}
+/**
+ * END USER OPTIONS
+ * ************************************************************************************************ */
+
 class _Log {
 
     /**
