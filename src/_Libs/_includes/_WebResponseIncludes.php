@@ -9,7 +9,7 @@
  * 
  **************************************************************************************************/
 
-namespace _\_includes;
+namespace _;
 
 class _WebResponseIncludes{
 	// http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
