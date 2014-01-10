@@ -235,14 +235,17 @@ class _Log {
 
         $msg .= ' [ ';
         $doLogAtEnd = TRUE;
-        $class = @get_class($obj);
+        $type = gettype($obj);
+        $class = '';
+        if($type == 'object') {
+            $class = @get_class($obj);
+        }
         if (!isset($obj)) {
             $msg .= " NULL - Object is not set";
         } elseif ($class == '_Exception' || $class == 'Exception') {
             $msg .= $obj->getTraceAsString() . "\n";
             $msg .= 'Exception: ' . $obj->getLine() . ':' . self::_getFile($obj->getFile()) . ' | ' . $obj->getMessage();
         } else {
-            $type = gettype($obj);
             switch ($type) {
                 case NULL:
                     $msg.=' NULL';
