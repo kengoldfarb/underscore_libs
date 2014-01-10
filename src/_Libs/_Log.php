@@ -18,7 +18,7 @@
  * @package _Libs
  * @subpackage _Log
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
@@ -77,7 +77,7 @@ class _LogContants {
 class _Log {
 
     /**
-     * @var _LOG_LEVEL | May be:  _DEBUG, _INFO, _WARN, _CRIT, _FATAL
+     * @var _LOG_LEVEL | May be:  _LogContants::DEBUG, _LogContants::INFO, _LogContants::WARN, _LogContants::CRIT, _LogContants::FATAL
      */
     public static $logLevel = _LogConfig::LOG_LEVEL;
 
@@ -102,12 +102,12 @@ class _Log {
      * @var array 
      */
     protected static $logLevelToString = array(
-        _LogContants::FATAL => '_FATAL',
-        _LogContants::CRIT => '_CRIT',
-        _LogContants::WARN => '_WARN',
-        _LogContants::INFO => '_INFO',
-        _LogContants::DEBUG => '_DEBUG',
-        _LogContants::DEBUG_LIB => '_DEBUG_LIB'
+        _LogContants::FATAL => 'FATAL',
+        _LogContants::CRIT => 'CRIT',
+        _LogContants::WARN => 'WARN',
+        _LogContants::INFO => 'INFO',
+        _LogContants::DEBUG => 'DEBUG',
+        _LogContants::DEBUG_LIB => 'DEBUG_LIB'
     );
     protected static $numFileLogs = 0;
 
@@ -233,7 +233,7 @@ class _Log {
             $msg .= ']';
         }
 
-        $msg .= ' [ ';
+        $msg .= ' [';
         $doLogAtEnd = TRUE;
         $type = gettype($obj);
         $class = '';

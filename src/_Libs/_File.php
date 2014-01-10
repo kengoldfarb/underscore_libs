@@ -9,7 +9,7 @@
  * @package _Libs
  * @subpackage _Db
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
