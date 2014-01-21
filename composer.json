@@ -2,7 +2,7 @@
     "name": "kengoldfarb/underscore_libs",
     "description": "_php libraries",
     "homepage": "http://underscorephp.com",
-    "license": "GPL-3.0+",
+    "license": "MIT",
     "authors": [
     {
         "name": "Ken Goldfarb",

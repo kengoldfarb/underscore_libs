@@ -1,4 +1,7 @@
 <?php
+/**
+* 
+*/
 class _Info{
     public static function _getUserIpAddr ()
     {

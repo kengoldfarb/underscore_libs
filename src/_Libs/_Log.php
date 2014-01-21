@@ -353,19 +353,3 @@ class _Log {
     }
 
 }
-
-class _LogLib extends _Log {    
-    /**
-     * WARNING: YOU SHOULD USE THE REGULAR _Log CLASS
-     * 
-     * This should be used only for _Lib logging
-     * 
-     * Logs a message or complex object at the _DEBUG_LIB log level
-     * 
-     * @param object $anyObject
-     * @return bool | TRUE on success / FALSE on failure
-     */
-    public static function debug($anyObject){
-        return self::writeToLog(_LogContants::DEBUG_LIB, $anyObject);
-    }
-}

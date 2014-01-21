@@ -9,13 +9,13 @@ use the others.  Plug and play so to speak.
 ## Installation
 There are 2 ways to install...
 
-1. Using the [composer](http://getcomposer.org/) package manager
+* Using the [composer](http://getcomposer.org/) package manager
 In your composer.json file add:
 
 ```json
 {
     "require": {
-        "kengoldfarb/underscore_libs": "1.*"
+        "kengoldfarb/underscore_libs": "2.*"
     }
 }
 ```
@@ -23,7 +23,7 @@ In your composer.json file add:
 Then install it (from the same directory as composer.json):
     php composer.phar install
 
-2. Download the latest source
+* Download the latest source
 
 
 ## Usage
@@ -52,4 +52,4 @@ $encryptedString = _Crypt::_encryptAESPKCS7('some string to encrypt');
 ```
 
 ## License
-[GNU General Public License Version 3](http://www.gnu.org/licenses/gpl.html)
+[MIT](LICENSE)
