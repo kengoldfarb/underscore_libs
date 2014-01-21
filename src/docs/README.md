@@ -1,1 +1,0 @@
-## [UnderscorePHP.com source](http://www.underscorephp.com)
