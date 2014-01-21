@@ -6,7 +6,7 @@
  * @package _LibsTests
  * @subpackage _LogTest
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
@@ -20,6 +20,8 @@ require_once _LIB . '_Log.php';
 
 use _\_Log;
 use _\_LogContants;
+
+date_default_timezone_set('America/Denver');
 
 class _LogTest extends PHPUnit_Framework_TestCase {
     public function testSettingCustomLogLevel() {
