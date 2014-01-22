@@ -261,6 +261,18 @@ class _Db {
     private static $_db;
 
     /**
+     * Creates the connection to the MySQL DB through the MySQLi interface
+     * 
+     * @param boolean $useExceptions (optional) | Override on whether to use exceptions.  If not passed will use _DB_USE_EXCEPTIONS
+     * @return boolean | TRUE on success (connection was made) / FALSE on failure
+     * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
+     * false on connection error
+     */
+    public static function _createConnection($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET) {
+        self::$_db = new _Db($host, $username, $password, $dbName, $port, $socket);
+    }
+
+    /**
      * 
      * @param type $sql
      * @param bool $useExceptions Optional - If set to TRUE will throw an _Exception() | If set to FALSE will return FALSE on error
@@ -298,18 +310,6 @@ class _Db {
             self::_createConnection();
         }
         return self::$_db->getRow($result, $useExceptions);
-    }
-
-    /**
-     * Creates the connection to the MySQL DB through the MySQLi interface
-     * 
-     * @param boolean $useExceptions (optional) | Override on whether to use exceptions.  If not passed will use _DB_USE_EXCEPTIONS
-     * @return boolean | TRUE on success (connection was made) / FALSE on failure
-     * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
-     * false on connection error
-     */
-    public static function _createConnection($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET) {
-        self::$_db = new _Db($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET);
     }
 
     /**

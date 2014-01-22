@@ -76,7 +76,6 @@ jZ10TNRVnrubvoT9KU9e7TCVCDabBxPzGx5AoOwo2W5QS3QseZ/Spfw=
  * ************************************************************************************************ */
  
 class _Crypt {
-
     /**
      * Encrypts a string using AES encryption with PKCS7 padding.
      * Random IV is used
@@ -172,6 +171,29 @@ class _Crypt {
     }
 
     /**
+     * Generates a RSA public/private keypair
+     *
+     * @param int $keyBits (optional) The number of key bits to use. Can be: 1024, 2048, 4096
+     * @return array Returns an associative array with 'public' and 'private' keys
+     */
+    public static function _generateRSAKeys($keyBits = 2048) {
+        $conf = array(
+            'digest_alg' => 'sha256',
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            'private_key_bits' => $keyBits,
+            'encrypt_key' => true,
+        );
+
+
+        $res = openssl_pkey_new($conf);
+        $keys = array();
+        openssl_pkey_export($res, $keys['private']);
+        $publickey = openssl_pkey_get_details($res);
+        $keys['public'] = $publickey["key"];
+        return($keys);
+    }
+
+    /**
      * Generates a random 24 char string to be used as an AES key
      * 
      * @return string Random 24 char string
@@ -201,29 +223,6 @@ class _Crypt {
      */
     private static function _getIVSize($cipher, $mode) {
         return mcrypt_get_iv_size($cipher, $mode);
-    }
-
-    /**
-     * Generates a RSA public/private keypair
-     *
-     * @param int $keyBits (optional) The number of key bits to use. Can be: 1024, 2048, 4096
-     * @return array Returns an associative array with 'public' and 'private' keys
-     */
-    public static function _generateRSAKeys($keyBits = 2048) {
-        $conf = array(
-            'digest_alg' => 'sha256',
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            'private_key_bits' => $keyBits,
-            'encrypt_key' => true,
-        );
-
-
-        $res = openssl_pkey_new($conf);
-        $keys = array();
-        openssl_pkey_export($res, $keys['private']);
-        $publickey = openssl_pkey_get_details($res);
-        $keys['public'] = $publickey["key"];
-        return($keys);
     }
 
     /**
