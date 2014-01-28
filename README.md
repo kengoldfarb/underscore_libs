@@ -216,7 +216,7 @@ use _\_UUID;
 $uuid = '55a0afe6-0e00-4c08-9fb9-7905f0a106b6';
 $binaryUUID = _UUID::charUUIDToBinary($uuid);
 
-$strUUID = _UUID::binaryUUIDToCharUUID($uuid);
+$strUUID = _UUID::binaryUUIDToCharUUID($binaryUUID);
 
 // At this point, $uuid == $strUUID
 ```
