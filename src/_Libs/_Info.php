@@ -16,6 +16,12 @@
 namespace _;
 
 class _Info{
+	/**
+     * Gets the current user's IP address
+     * 
+     * @param object $anyObject
+     * @return string | The users ip address or 'unknown.ip.address'
+     */
     public static function _getUserIpAddr ()
     {
         $ip = 'unknown.ip.address';
@@ -28,5 +34,14 @@ class _Info{
 	        }
 	    }
         return $ip;
+    }
+
+    /**
+     * Gets the current time in proper format for mysql
+     * 
+     * @return string | The current datetime formatted for mysql
+     */
+    public static function _mysqlNow() {
+    	return date('Y-m-d H:i:s');
     }
 }
