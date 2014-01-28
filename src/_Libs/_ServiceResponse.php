@@ -46,7 +46,7 @@ class _ServiceResponse {
      * @param const $format _ServiceResponse_JSON or _ServiceResponse_XML
      * @return string The response
      */
-    public static function _failure($objects, $echoResponse = TRUE, $format = _ServiceResponse_JSON) {
+    public static function _failure($objects, $echoResponse = TRUE, $format = 'json') {
         return self::_doResponse('failure', $objects, $echoResponse, $format);
     }
 
