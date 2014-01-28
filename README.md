@@ -41,7 +41,7 @@ Here you'll find information and examples about each of the libraries.  These ex
 * [ServiceResponse](#service-response): _For API responses to generate consistent json or xml responses_
 * [Session](#session): _A session wrapper to provide additional error checking_
 * [SSL](#ssl): _Methods to check if SSL is active or require SSL_
-* [Web Response](#web-response): _Some nice utility stuff like setting P3P headers, sending http status codes, etc.
+* [Web Response](#web-response): _Some nice utility stuff like setting P3P headers, sending http status codes, etc._
 * [Info](#info): _Extract information about a web request_
 
 ## Tests
@@ -327,6 +327,116 @@ if($writeSuccessful) {
 	// Hand error writing file
 }
 ```
+
+<a name="info" />
+### Info
+
+General info and helper class.
+
+#### Get the user's IP address
+
+Gets the user's ip.  This should work behind load balancers.  It will first check for the ```HTTP_X_FORWARDED_FOR``` header for the ip address.  If that isn't set it will use ```REMOTE_ADDR```.
+
+```php
+use _\_Info;
+$userIp = _Info::_getUserIpAddr();
+```
+
+#### Get the current datetime in a mysql friendly format
+
+```php
+use _\_Info;
+$mysqlDatetime = _Info::_mysqlNow();
+```
+
+<a name="random" />
+### Random
+
+#### Get Random Number
+
+**_getRand($min, $max)**
+
+```php
+use _\_Rand;
+$min = 0;
+$max = 100;
+_Rand::_getRand($min, $max);
+```
+
+#### Get Random String
+
+**_randString($length, $lettersNumbersOnly = false)**
+
+```php
+use _\_Rand;
+$length = 10; // The number of characters in the string
+$lettersNumbersOnly = true; // String will contain only letters and numbers
+_Rand::_randString($length, $lettersNumbersOnly);
+```
+
+#### Get Random Character
+
+**_randCharacter($start = 32, $end = 126)**
+
+##### Parameters
+
+**$start** The ascii character code to start from
+**$end** The ascii character code to end at
+
+See [http://www.asciitable.com](http://www.asciitable.com/) for a list of character codes
+
+```
+use _\_Rand;
+$randChar = _Rand::_randCharacter();
+```
+
+<a name="serviceresponse" />
+### Service Response
+
+This library generates json or xml responses in a consistent format.
+
+#### Parameters
+
+**$objects** Any object to be serialized.  String, number, object, array, etc.
+**$echoResponse** _optional_ Whether or not to echo the response
+**$format** _optional_ 'json' or 'xml'
+
+#### Success
+
+**_success($objects, $echoResponse = TRUE, $format = 'json')**
+
+```php
+use _\_ServiceResponse;
+_ServiceResponse::_success(array('hello' => 'world'));
+
+// Result: {"status": "success", "hello": "world"}
+```
+
+#### Failure
+
+**_failure($objects, $echoResponse = TRUE, $format = 'json')**
+
+```php
+use _\_ServiceResponse;
+_ServiceResponse::_failure(array('reason' => 'server error'));
+
+// Result: {"status": "failure", "reason": "server error"}
+```
+
+<a name="ssl" />
+### SSL
+
+TODO
+
+<a name="session" />
+### Session
+
+TODO
+
+<a name="webresponse" />
+### Web Response
+
+TODO
 
 ## Versioning
 
