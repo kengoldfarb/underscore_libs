@@ -158,14 +158,15 @@ This type of encryption is perfect for situations where you need to encrypt some
 #### Generate RSA Public/Private keypair
 Generate a keypair.  You can optionally pass in $keybits which may be one of: 1024, 2048, 4096
 
-```
+```php
 $keys = _Crypt::_generateRSAKeys();
 $publicKey = $keys['public'];
 $privateKey = $keys['private'];
 ```
 
 #### RSA Encrypt/Decrypt
-```
+
+```php
 $textToEncrypt = "How much wood could a woodchuck chuck if a woodchuck could chuck wood?";
 $encryptedText = _Crypt::_encryptRSA($textToEncrypt, $publicKey);
 $decryptedText = _Crypt::_decryptRSA($encryptedText, $privateKey);
