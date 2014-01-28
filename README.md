@@ -70,11 +70,12 @@ You can set the following options on the logger:
 * _Log::$logLevel _Default: DEBUG_
 
 The log level may be set to one of:
-_\_LogContants::FATAL
-_\_LogContants::CRIT
-_\_LogContants::WARN
-_\_LogContants::INFO
-_\_LogContants::DEBUG
+
+* _\_LogContants::FATAL
+* _\_LogContants::CRIT
+* _\_LogContants::WARN
+* _\_LogContants::INFO
+* _\_LogContants::DEBUG
 
 Once set, any logs at or above that level will be logged.  For example, if I set the level to INFO, any 'debug' logs will not be written but a 'warn' log would be written.
 
