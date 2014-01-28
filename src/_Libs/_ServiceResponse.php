@@ -13,7 +13,7 @@
  * @package _Libs
  * @subpackage _ServiceResponse
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
@@ -23,7 +23,6 @@ if (!defined('_BASE_PATH')) {
     define('_BASE_PATH', realpath(dirname(__FILE__) . '/') . '/');
 }
 
-require_once(_BASE_PATH . '_includes/_ServiceResponseIncludes.php');
 
 class _ServiceResponse {
 
@@ -32,10 +31,10 @@ class _ServiceResponse {
      * 
      * @param array $objects An object or array of objects
      * @param bool $echoResponse Whether to echo out of response
-     * @param const $format _ServiceResponse_JSON or _ServiceResponse_XML
+     * @param string $format 'json' or 'xml'
      * @return string The response
      */
-    public static function _success($objects, $echoResponse = TRUE, $format = _ServiceResponse_JSON) {
+    public static function _success($objects, $echoResponse = TRUE, $format = 'json') {
         return self::_doResponse('success', $objects, $echoResponse, $format);
     }
 
@@ -47,7 +46,7 @@ class _ServiceResponse {
      * @param const $format _ServiceResponse_JSON or _ServiceResponse_XML
      * @return string The response
      */
-    public static function _failure($objects, $echoResponse = TRUE, $format = _ServiceResponse_JSON) {
+    public static function _failure($objects, $echoResponse = TRUE, $format = 'json') {
         return self::_doResponse('failure', $objects, $echoResponse, $format);
     }
 
@@ -72,7 +71,7 @@ class _ServiceResponse {
         }
 
         switch ($format) {
-            case _ServiceResponse_XML:
+            case 'xml':
                 require_once 'XML/Serializer.php';
                 $options = array(
                     "indent" => "    ",
@@ -95,7 +94,7 @@ class _ServiceResponse {
                 $ret = $serializer->getSerializedData();
                 break;
 
-            case _ServiceResponse_JSON:
+            case 'json':
             default:
                 $ret = json_encode($ret);
                 break;

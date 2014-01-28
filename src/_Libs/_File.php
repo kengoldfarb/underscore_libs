@@ -9,7 +9,7 @@
  * @package _Libs
  * @subpackage _Db
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
@@ -20,7 +20,20 @@ if (!defined('_BASE_PATH')) {
 }
 require_once(_BASE_PATH . '_Log.php');
 require_once(_BASE_PATH . '_Exception.php');
-require_once(_BASE_PATH . '_includes/_FileIncludes.php');
+
+class _FileConstants{
+  const READ_ONLY = 'r';
+  const READ_WRITE = 'r+';
+  const WRITING_ONLY_CREATE = 'w';
+  const READ_WRITE_TRUNCATE_CREATE = 'w+';
+  const WRITE_ONLY_END_OF_FILE_CREATE = 'a';
+  const READ_WRITE_END_OF_FILE_CREATE = 'a+';
+  const WRITE_ONLY_BEGIN_OF_FILE = 'x';
+  const READ_WRITE_BEGIN_OF_FILE = 'x+';
+  const WRITE_ONLY_NO_TRUNCATE_BEGIN_OF_FILE = 'c';
+  const READ_WRITE_NO_TRUNCATE_BEGIN_OF_FILE = 'c+';
+  const TMP = '_FILE_CREATE_TEMPORARY';
+}
 
 class _File {
 
@@ -30,22 +43,22 @@ class _File {
 
     /**
      * 
-     * @param type $filename (optional) The file to open or _FILE_TMP to generate a temporary file
+     * @param type $filename (optional) The file to open or _FileConstants::TMP to generate a temporary file
      * @param type $permissions (optional) The permissions to open the file
-     *  _FILE_READ_ONLY
-      _FILE_READ_WRITE
-      _FILE_WRITING_ONLY_CREATE
-      _FILE_READ_WRITE_TRUNCATE_CREATE
-      _FILE_WRITE_ONLY_END_OF_FILE_CREATE
-      _FILE_READ_WRITE_END_OF_FILE_CREATE
-      _FILE_WRITE_ONLY_BEGIN_OF_FILE
-      _FILE_READ_WRITE_BEGIN_OF_FILE
-      _FILE_WRITE_ONLY_NO_TRUNCATE_BEGIN_OF_FILE
-      _FILE_READ_WRITE_NO_TRUNCATE_BEGIN_OF_FILE
+     *  _FileConstants::READ_ONLY
+     *  _FileConstants::READ_WRITE
+     *  _FileConstants::WRITING_ONLY_CREATE
+     *  _FileConstants::READ_WRITE_TRUNCATE_CREATE
+     *  _FileConstants::WRITE_ONLY_END_OF_FILE_CREATE
+     *  _FileConstants::READ_WRITE_END_OF_FILE_CREATE
+     *  _FileConstants::WRITE_ONLY_BEGIN_OF_FILE
+     *  _FileConstants::READ_WRITE_BEGIN_OF_FILE
+     *  _FileConstants::WRITE_ONLY_NO_TRUNCATE_BEGIN_OF_FILE
+     *  _FileConstants::READ_WRITE_NO_TRUNCATE_BEGIN_OF_FILE
      * 
      * @return boolean TRUE on success of opening $filename / FALSE on failure to open $filename OR if no $filename was provided
      */
-    public function __construct($filename = NULL, $permissions = _FILE_READ_WRITE_END_OF_FILE_CREATE) {
+    public function __construct($filename = NULL, $permissions = _FileConstants::READ_WRITE_END_OF_FILE_CREATE) {
         if ($filename === NULL) {
             _Log::debug('No filename specified');
             return FALSE;
@@ -118,14 +131,14 @@ class _File {
      * @param const $permissions The permissions
      * @return boolean TRUE if file was opened / FALSE if file was unable to be opened
      */
-    private function openFile($filename, $permissions = _FILE_READ_WRITE_END_OF_FILE_CREATE) {
+    private function openFile($filename, $permissions = _FileConstants::READ_WRITE_END_OF_FILE_CREATE) {
         $this->closeFile();
         if ($filename === NULL) {
             _Log::debug('Invalid filename specified');
             return false;
         }
 
-        if ($filename == _FILE_TMP) {
+        if ($filename == _FileConstants::TMP) {
             $this->filename = tempnam($this->getTemporaryFileDirectory(), '_');
             $this->fh = tmpfile();
         } else {
@@ -142,21 +155,21 @@ class _File {
 
     private static $_file = FALSE;
 
-    public static function _writeToFile($textToWrite, $filename, $permissions = _FILE_READ_WRITE_END_OF_FILE_CREATE) {
+    public static function _writeToFile($textToWrite, $filename, $permissions = _FileConstants::READ_WRITE_END_OF_FILE_CREATE) {
         if (self::$_file === FALSE) {
             self::_createFileObject($filename, $permissions);
         }
         return self::$_file->writeToFile($textToWrite);
     }
 
-    public static function _readAllFromFile($filename, $permission = _FILE_READ_ONLY) {
+    public static function _readAllFromFile($filename, $permission = _FileConstants::READ_ONLY) {
         if (self::$_file === FALSE) {
             self::_createFileObject($filename, $permissions);
         }
         return self::$_file->readAllFromFile($filename);
     }
 
-    private static function _createFileObject($filename = NULL, $permissions = _FILE_READ_WRITE_END_OF_FILE_CREATE) {
+    private static function _createFileObject($filename = NULL, $permissions = _FileConstants::READ_WRITE_END_OF_FILE_CREATE) {
         self::$_file = new _File($filename, $permissions);
     }
 

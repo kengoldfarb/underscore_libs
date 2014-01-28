@@ -24,4 +24,3 @@ if($row = $db->getRow()){
 }
 
 echo $thing;
-?>

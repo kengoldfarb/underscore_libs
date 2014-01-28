@@ -9,7 +9,7 @@
  * @package _Libs
  * @subpackage _Db
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
@@ -21,7 +21,6 @@ if (!defined('_BASE_PATH')) {
 
 require_once(_BASE_PATH . '_Log.php');
 require_once(_BASE_PATH . '_Exception.php');
-require_once(_BASE_PATH . '_includes/_DbIncludes.php');
 
 
 /* * ************************************************************************************************
@@ -30,52 +29,56 @@ require_once(_BASE_PATH . '_includes/_DbIncludes.php');
  * To be used when this library is stand-alone
  * 
  */
-// The DB host
-if (!defined('_DB_HOST')) {
-    define('_DB_HOST', 'localhost');
-}
-// The DB username
-if (!defined('_DB_USERNAME')) {
-    define('_DB_USERNAME', 'root');
-}
-// The password for the user
-if (!defined('_DB_PASSWORD')) {
-    define('_DB_PASSWORD', 'root');
-}
-// The actual DB name
-if (!defined('_DB_NAME')) {
-    define('_DB_NAME', 'underscorephp');
-}
-// The connection port
-if (!defined('_DB_PORT')) {
-    define('_DB_PORT', '3306');
-}
-// The socket connection to use (can be NULL)
-if (!defined('_DB_SOCKET')) {
-    define('_DB_SOCKET', NULL);
-}
-// Whether to throw exceptions when connection or query failures occur
-if (!defined('_DB_USE_EXCEPTIONS')) {
-    define('_DB_USE_EXCEPTIONS', TRUE);
-}
-// The DB charset to use
-if (!defined('_DB_CHARSET')) {
-    define('_DB_CHARSET', 'utf8');
-}
-// Whether to log all SQL statements **IMPORTANT: THIS IS A DEBUG FUNCTION.
-// DO NOT SET THIS TO 'TRUE' IN A PRODUCTION ENVIRONMENT!!!
-if (!defined('_DB_LOG_SQL')) {
-    define('_DB_LOG_SQL', FALSE);
+ 
+class _DbConfig{
+    // The DB host
+    const HOST = '127.0.0.1';
+    // The DB username
+    const USERNAME = 'root';
+    // The password for the user
+    const PASSWORD = 'root';
+    // The actual DB name
+    const DB_NAME = 'underscorelibs';
+    // The connection port
+    const PORT = '3306';
+    // The socket connection to use (can be NULL)
+    const SOCKET = NULL;
+    // Whether to throw exceptions when connection or query failures occur
+    const USE_EXCEPTIONS = TRUE;
+    // The DB charset to use
+    const CHARSET = 'utf8';
+    // Whether to log all SQL statements **IMPORTANT: THIS IS A DEBUG FUNCTION.
+    // DO NOT SET THIS TO 'TRUE' IN A PRODUCTION ENVIRONMENT!!!
+    const LOG_SQL = FALSE;
 }
 
 /**
  * END _Db USER OPTIONS
  * ************************************************************************************************ */
+
+/* * ************************************************************************************************
+ * BEGIN INTERNAL _Db CONSTANTS
+ * 
+ * There's probably no reason you'd ever need to edit this
+ * 
+ */
+ 
+class _DbErrors{
+    const CONNECTION_ERROR = -1300;
+    const QUERY_ERROR = -1301;
+    const ERROR = -1302;
+}
+
+/**
+ * END INTERNAL _Db CONSTANTS
+ * ************************************************************************************************ */
+ 
+ 
 /* * ************************************************************************************************
  * The Database class
  */
 class _Db {
-    /*     * ******************************************************
+    /* *******************************************************
      * 
      * Instatiated Object Methods
      * 
@@ -110,7 +113,7 @@ class _Db {
      * @param type $port
      * @param type $socket
      */
-    public function __construct($host = _DB_HOST, $username = _DB_USERNAME, $password = _DB_PASSWORD, $dbName = _DB_NAME, $port = _DB_PORT, $socket = _DB_SOCKET) {
+    public function __construct($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET) {
         $this->host = $host;
         $this->username = $username;
         $this->password = $password;
@@ -126,14 +129,14 @@ class _Db {
      * @return boolean|string
      * @throws _Exception with code _DB_QUERY_ERROR only if _DB_USE_EXCEPTIONS == TRUE or $useExceptions (override) == TRUE
      */
-    public function query($sql, $useExceptions = _DB_USE_EXCEPTIONS) {
+    public function query($sql, $useExceptions = _DbConfig::USE_EXCEPTIONS) {
         if (!$this->isConnected) {
             $rc = $this->createConnection();
             if ($rc === FALSE) {
                 return FALSE;
             }
         }
-        if (_DB_LOG_SQL) {
+        if (_DbConfig::LOG_SQL) {
             _Log::debug($sql);
         }
 
@@ -141,7 +144,7 @@ class _Db {
             $this->lastResult = $this->mysqli->query($sql);
         } catch (Exception $e) {
             if ($useExceptions) {
-                throw new _Exception('Error executing query | ' . $e->getMessage(), _DB_QUERY_ERROR, $e);
+                throw new _Exception('Error executing query | ' . $e->getMessage(), _DbErrors::QUERY_ERROR, $e);
             } else {
                 return FALSE;
             }
@@ -153,7 +156,7 @@ class _Db {
             _Log::crit('Error occurred while executing query');
 
             if ($useExceptions) {
-                throw new _Exception('Error executing query', _DB_QUERY_ERROR);
+                throw new _Exception('Error executing query', _DbErrors::QUERY_ERROR);
             } else {
                 return FALSE;
             }
@@ -171,7 +174,7 @@ class _Db {
      * @param bool $useExceptions | Override to throw an _Exception on error
      * @return array/bool | Returns the row as an associative array on success / FALSE on failure
      */
-    public function getRow($result = NULL, $useExceptions = _DB_USE_EXCEPTIONS) {
+    public function getRow($result = NULL, $useExceptions = _DbConfig::USE_EXCEPTIONS) {
         if ($result === NULL) {
             $result = $this->lastResult;
         }
@@ -225,7 +228,7 @@ class _Db {
      * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
      * false on connection error
      */
-    private function createConnection($useExceptions = _DB_USE_EXCEPTIONS) {
+    private function createConnection($useExceptions = _DbConfig::USE_EXCEPTIONS) {
         $this->mysqli = new \mysqli($this->host, $this->username, $this->password, $this->dbName, $this->port, $this->socket);
         if (mysqli_connect_errno()) {
             $msg = 'Unable to connect to MySQL | ' . mysqli_connect_error();
@@ -239,7 +242,7 @@ class _Db {
         }
         if (isset($this->mysqli) && $this->mysqli !== NULL) {
             // set charset
-            $rc = $this->mysqli->set_charset(_DB_CHARSET);
+            $rc = $this->mysqli->set_charset(_DbConfig::CHARSET);
             if ($rc !== TRUE) {
                 _Log::warn('Error setting character set');
             }
@@ -256,6 +259,18 @@ class _Db {
      * ***************************************************** */
 
     private static $_db;
+
+    /**
+     * Creates the connection to the MySQL DB through the MySQLi interface
+     * 
+     * @param boolean $useExceptions (optional) | Override on whether to use exceptions.  If not passed will use _DB_USE_EXCEPTIONS
+     * @return boolean | TRUE on success (connection was made) / FALSE on failure
+     * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
+     * false on connection error
+     */
+    public static function _createConnection($host = _DbConfig::HOST, $username = _DbConfig::USERNAME, $password = _DbConfig::PASSWORD, $dbName = _DbConfig::DB_NAME, $port = _DbConfig::PORT, $socket = _DbConfig::SOCKET) {
+        self::$_db = new _Db($host, $username, $password, $dbName, $port, $socket);
+    }
 
     /**
      * 
@@ -290,23 +305,11 @@ class _Db {
      * @param bool $useExceptions | Override to throw an _Exception on error
      * @return array/bool | Returns the row as an associative array on success / FALSE on failure
      */
-    public static function _getRow($result = NULL, $useExceptions = _DB_USE_EXCEPTIONS) {
+    public static function _getRow($result = NULL, $useExceptions = _DbConfig::USE_EXCEPTIONS) {
         if (!self::_isConnected()) {
             self::_createConnection();
         }
         return self::$_db->getRow($result, $useExceptions);
-    }
-
-    /**
-     * Creates the connection to the MySQL DB through the MySQLi interface
-     * 
-     * @param boolean $useExceptions (optional) | Override on whether to use exceptions.  If not passed will use _DB_USE_EXCEPTIONS
-     * @return boolean | TRUE on success (connection was made) / FALSE on failure
-     * @throws _Exception | If _DB_USE_EXCEPTIONS is TRUE, will throw an exception instead of returning
-     * false on connection error
-     */
-    public static function _createConnection($host = _DB_HOST, $username = _DB_USERNAME, $password = _DB_PASSWORD, $dbName = _DB_NAME, $port = _DB_PORT, $socket = _DB_SOCKET) {
-        self::$_db = new _Db($host = _DB_HOST, $username = _DB_USERNAME, $password = _DB_PASSWORD, $dbName = _DB_NAME, $port = _DB_PORT, $socket = _DB_SOCKET);
     }
 
     /**

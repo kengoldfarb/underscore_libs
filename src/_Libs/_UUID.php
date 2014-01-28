@@ -8,7 +8,7 @@
  * @package _Libs
  * @subpackage _UUID
  * @author Ken Goldfarb <hello@kengoldfarb.com>
- * @license <http://www.gnu.org/licenses/gpl.html> GNU General Public License Version 3
+ * @license <http://opensource.org/licenses/MIT> MIT
  * 
  * ************************************************************************************************ */
 
@@ -17,8 +17,6 @@ namespace _;
 if (!defined('_BASE_PATH')) {
     define('_BASE_PATH', realpath(dirname(__FILE__) . '/') . '/');
 }
-
-require_once(_BASE_PATH . '_Exception.php');
 
 class _UUID {
 

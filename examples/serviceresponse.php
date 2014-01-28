@@ -9,4 +9,3 @@ $objectsToRespondWith['complex_array'] = array("animal" => "dog", "country" => "
 
 _ServiceResponse::_success($objectsToRespondWith);
 //_ServiceResponse::_failure($objectsToRespondWith);
-?>
