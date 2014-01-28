@@ -1,7 +1,20 @@
 <?php
-/**
-* 
-*/
+
+/* * ************************************************************************************************
+ * _PHP <http://www.underscorePHP.com>
+ * 
+ * 
+ * Library to get general info
+ *
+ * @package _Libs
+ * @subpackage _Info
+ * @author Ken Goldfarb <hello@kengoldfarb.com>
+ * @license <http://opensource.org/licenses/MIT> MIT
+ * 
+ * ************************************************************************************************ */
+
+namespace _;
+
 class _Info{
     public static function _getUserIpAddr ()
     {
