@@ -123,12 +123,14 @@ The Crypt class provides AES and RSA encryption and decryption methods.
 
 Default: MCRYPT_RIJNDAEL_256
 Allowed values are: MCRYPT_RIJNDAEL_128, MCRYPT_RIJNDAEL_192, MCRYPT_RIJNDAEL_256
+
 [More information](http://www.php.net/manual/en/mcrypt.ciphers.php)
 
 **$mode** _Optional_
 
 Default: MCRYPT_MODE_CBC
 Allowed values are: MCRYPT_MODE_CBC, MCRYPT_MODE_ECB, MCRYPT_MODE_CFB, MCRYPT_MODE_OFB, MCRYPT_MODE_NOFB, MCRYPT_MODE_STREAM
+
 [More information](http://us3.php.net/manual/en/mcrypt.constants.php)
 
 ##### Basic Example
