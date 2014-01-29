@@ -252,7 +252,11 @@ class _Log {
                     break;
 
                 case 'boolean':
-                    $msg.=' ' . $obj ? 'TRUE' : 'FALSE';
+                    if($obj) {
+                        $msg.=' TRUE';
+                    }else{
+                        $msg.=' FALSE';
+                    }
                     break;
 
                 case 'integer':
