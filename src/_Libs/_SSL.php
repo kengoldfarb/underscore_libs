@@ -37,12 +37,12 @@ class _SSL {
 
     /**
      * Determines whether the connection is over SSL
-     * 
+     * HTTP_X_FORWARDED_PROTO
      * @return boolean TRUE if the connection is SSL | FALSE if not SSL
      */
     public static function _isSSL() {
         // Check if SSL is enabled
-        if (isset($_SERVER) && isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == "on") {
+        if (isset($_SERVER) && (isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == "on") || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") ) {
             return TRUE;
         }
         return FALSE;
