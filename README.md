@@ -119,7 +119,7 @@ The Crypt class provides AES and RSA encryption and decryption methods.
 
 **$key** _Required_
 
-**$cipher** _Optional_ 
+**$cipher** _Optional_
 
 Default: MCRYPT_RIJNDAEL_256
 Allowed values are: MCRYPT_RIJNDAEL_128, MCRYPT_RIJNDAEL_192, MCRYPT_RIJNDAEL_256
@@ -246,7 +246,7 @@ $dbName = 'the_db';
 $port = 3306;
 
 _Db::_createConnection($host, $username, $password, $dbName, $port);
-``
+```
 
 ##### Create a query, escape it, get the number of rows and process the rows
 ```php
