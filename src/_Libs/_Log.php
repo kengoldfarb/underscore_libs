@@ -2,13 +2,13 @@
 
 /* * ************************************************************************************************
  * _PHP <http://www.underscorePHP.com>
- * 
- * 
+ *
+ *
  * The _Log class provides logging functions at 5 levels: _DEBUG, _INFO, _WARN, _CRIT, _FATAL
- * 
+ *
  * Any object may be passed to the logging functions.  If a complex object (array, object, etc.)
  * then the logger will log the object in the same format as the print_r() function.
- * 
+ *
  * Configuration options include setting:
  * 1. Log level (_LOG_LEVEL)
  * 2. Whether complex objects should be logged (_LOG_OBJECTS)
@@ -19,7 +19,7 @@
  * @subpackage _Log
  * @author Ken Goldfarb <hello@kengoldfarb.com>
  * @license <http://opensource.org/licenses/MIT> MIT
- * 
+ *
  * ************************************************************************************************ */
 
 namespace _;
@@ -28,23 +28,59 @@ if (!defined('_BASE_PATH')) {
     define('_BASE_PATH', realpath(dirname(__FILE__) . '/') . '/');
 }
 
+if (isset($_ENV['LOG_LEVEL'])) {
+	switch($_ENV['LOG_LEVEL']) {
+		case 'FATAL':
+		case 'fatal':
+			define('_LIBS_Log_LOG_LEVEL', _LogContants::FATAL);
+			break;
+		case 'CRIT':
+		case 'crit':
+			define('_LIBS_Log_LOG_LEVEL', _LogContants::CRIT);
+			break;
+		case 'WARN':
+		case 'warn':
+			define('_LIBS_Log_LOG_LEVEL', _LogContants::WARN);
+			break;
+		case 'INFO':
+		case 'info':
+			define('_LIBS_Log_LOG_LEVEL', _LogContants::INFO);
+			break;
+		case 'DEBUG':
+		case 'debug':
+			define('_LIBS_Log_LOG_LEVEL', _LogContants::DEBUG);
+			break;
+
+		default:
+			define('_LIBS_Log_LOG_LEVEL', _LogContants::WARN);
+	}
+} else {
+	define('_LIBS_Log_LOG_LEVEL', _LogContants::WARN);
+}
+
+if (isset($_ENV['LOG_OBJECTS']) && ($_ENV['LOG_OBJECTS'] == 'false' || $_ENV['LOG_OBJECTS'] == 'FALSE')) {
+	define('_LIBS_Log_LOG_OBJECTS', false);
+} else {
+	define('_LIBS_Log_LOG_OBJECTS', true);
+}
+
 
 /* * ************************************************************************************************
  * BEGIN USER OPTIONS
- * 
+ *
  * If you are using this class as as stand-alone library, change configuration options below.
- * 
+ *
  * If you are using this class as part of _PHP MVC and have defined your configuration options
  * in an environment file (ex. /env/local.php) then the below options will be ignored
- * 
+ *
  */
 class _LogConfig {
     // Sets the minimum log level.  Can be DEBUG, INFO, WARN, CRIT, FATAL.
     // Setting this to DEBUG for example would also log all other types
     // Setting it to WARN would log only WARN or FATAL level
-    const LOG_LEVEL = _LogContants::DEBUG;
-    // Allows the logging of objects.  When set to true, objects will be logged in the format of print_r().  When set to false, only simple object types (strings, integers, etc.) will be logged.    
-    const LOG_OBJECTS = TRUE;
+    const LOG_LEVEL = _LIBS_Log_LOG_LEVEL;
+    // Allows the logging of objects.  When set to true, objects will be logged in the format of print_r().  When set to false, only simple object types (strings, integers, etc.) will be logged.
+    const LOG_OBJECTS = _LIBS_Log_LOG_OBJECTS;
     // Echos any errors to stdout instead of logging via error_log() function
     const LOG_ECHO = FALSE;
     // If logging using error_log() fails should an exception be thrown?  (Probably not)
@@ -58,7 +94,7 @@ class _LogConfig {
 
 /* * ************************************************************************************************
  * BEGIN Log Options
- * 
+ *
  * There's probably no reason you'd ever need to edit this
  */
 
@@ -82,24 +118,24 @@ class _Log {
     public static $logLevel = _LogConfig::LOG_LEVEL;
 
     /**
-     * @var bool 
+     * @var bool
      */
     public static $logObjects = _LogConfig::LOG_OBJECTS;
 
     /**
-     * @var bool 
+     * @var bool
      */
     public static $logEcho = _LogConfig::LOG_ECHO;
 
     /**
-     * @var bool 
+     * @var bool
      */
     public static $useExceptions = _LogConfig::USE_EXCEPTIONS;
 
     /**
      * Mapping of log level constants to strings
-     * 
-     * @var array 
+     *
+     * @var array
      */
     protected static $logLevelToString = array(
         _LogContants::FATAL => 'FATAL',
@@ -113,14 +149,14 @@ class _Log {
 
     /**
      * The last debug_backtrace() result
-     * 
+     *
      * @var object
      */
     protected static $lastDebugBacktrace = FALSE;
 
     /**
      * Logs a message or complex object at the _DEBUG log level
-     * 
+     *
      * @param object $anyObject
      * @return bool | TRUE on success / FALSE on failure
      */
@@ -130,7 +166,7 @@ class _Log {
 
     /**
      * Logs a message or complex object at the _INFO log level
-     * 
+     *
      * @param object $anyObject
      * @return bool | TRUE on success / FALSE on failure
      */
@@ -140,7 +176,7 @@ class _Log {
 
     /**
      * Logs a message or complex object at the _WARN log level
-     * 
+     *
      * @param object $anyObject
      * @return bool | TRUE on success / FALSE on failure
      */
@@ -150,7 +186,7 @@ class _Log {
 
     /**
      * Logs a message or complex object at the _CRIT log level
-     * 
+     *
      * @param object $anyObject
      * @return bool | TRUE on success / FALSE on failure
      */
@@ -160,7 +196,7 @@ class _Log {
 
     /**
      * Logs a message or complex object at the _FATAL log level
-     * 
+     *
      * @param object $anyObject
      * @return bool | TRUE on success / FALSE on failure
      */
@@ -170,7 +206,7 @@ class _Log {
 
     /**
      * Returns the last debug_backtrace() that was run
-     * 
+     *
      * @return object | The last debug_backtrace() run / FALSE if there is no previous debug_backtrace()
      */
     public static function getLastDebugBacktrace() {
@@ -179,7 +215,7 @@ class _Log {
 
     /**
      * Checks if the current log level is at or above the defined _LOG_LEVEL
-     * 
+     *
      * @param type $level The log level
      * @return bool Whether or not a log should be written
      */
@@ -192,7 +228,7 @@ class _Log {
 
     /**
      * Common logging function.  This is the heart of the _Log class and actually builds the message
-     * 
+     *
      * @param _LOG_LEVEL $level | May be:  _DEBUG, _INFO, _WARN, _CRIT, _FATAL
      * @param object $obj | The object to be logged
      * @return boolean | TRUE on success / FALSE on failure
@@ -205,7 +241,7 @@ class _Log {
         if(_LogConfig::DO_DEBUG_BACKTRACE){
             self::$lastDebugBacktrace = debug_backtrace();
         }
-        
+
         // Add level to message
         $level = self::$logLevelToString[$level];
         $msg = "***** [ _Log ][ $level ] ";
@@ -216,7 +252,7 @@ class _Log {
             $msg.= "[";
             $debugBacktraceLength = count(self::$lastDebugBacktrace);
             $first = true;
-            
+
             for ($i = $debugBacktraceLength; $i >= 0; $i--) {
                 if (isset(self::$lastDebugBacktrace[$i]) && isset(self::$lastDebugBacktrace[$i]['file'])) {
                     $file = self::_getFile(self::$lastDebugBacktrace[$i]['file']);
@@ -297,9 +333,9 @@ class _Log {
                     break;
             }
         }
-        
+
         $msg .= ' ] *****';
-        
+
         if ($doLogAtEnd) {
             return self::_doLog($msg);
         }
@@ -307,7 +343,7 @@ class _Log {
 
     /**
      * Writes the actual log message to error_log() or echos the message depending on whether self::$logEcho is TRUE or FALSE
-     * 
+     *
      * @param string $msg
      * @return boolean | TRUE on success / FALSE on failure
      * @throws _Exception | Only if error_log() fails and self::$useExceptions is TRUE
@@ -329,7 +365,7 @@ class _Log {
 
     /**
      * Extracts the filename from a full path
-     * 
+     *
      * @param string $fullPath The full path name
      * @return string The file name
      */
